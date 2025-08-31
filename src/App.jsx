@@ -54,10 +54,10 @@ const HeroSection = ({ currentSlide, slideshowImages, setCurrentSlide }) => (
               </h1>
               <div className="w-32 h-px bg-gradient-to-r from-teal-300 via-blue-200 to-teal-300 mx-auto lg:mx-0 mb-6"></div>
               <p className="text-lg text-slate-200 mb-3 font-light font-inter">
-                Beloved Aunt, Sister, and Friend
+                Beloved Wife, Mother, Sister , Aunt, In-law and Friend
               </p>
               <p className="text-base text-slate-400 mb-8 font-light tracking-wide">
-                [Birth Date] — 25th Aug 2025
+                15th Sept 1970 — 25th Aug 2025
               </p>
               <div className="relative mb-8">
                 <blockquote className="text-lg font-light text-slate-100 leading-relaxed italic font-crimson">
@@ -100,18 +100,18 @@ const AboutSection = () => (
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
             <div className="space-y-6">
               <p className="text-base font-light text-slate-200 leading-relaxed first-letter:text-4xl first-letter:font-medium first-letter:text-teal-200 first-letter:float-left first-letter:mr-3 first-letter:mt-1 font-crimson">
-                [Add a personal biography here - her passions, accomplishments, what made her special. This section should be customized with real details about your aunt's life, her interests, career, family, and the impact she had on others.]
+              Maama, as she has always been called by the children closest to her, has a reputation for being a solid woman - a woman of substance. Anyone in her orbit will describe her as spirited, generous, and cultured in her relations with people both senior and junior to her. She was at her best when spending time with her family. She demonstrated her love in acts of service, and she absolutely loves children. She always had a certain connection with each child. She was passionate about God, her family, giving, and excelled in whatever role she found herself in. As a matter of fact, diligence was a scale on which she believed a person's character must be weighed on in addition to other things. People who knew her (specifically in her youth) recall her as a 'spitfire', with a tongue just as sharp as the mind working behind it.
               </p>
               <p className="text-base font-light text-slate-300 leading-relaxed font-crimson">
-                [Include specific memories, her personality traits, hobbies she loved, places that were meaningful to her, and the legacy she leaves behind.]
+              She was blessed with confidence, loyalty, and a strong sense of justice - all traits that helped her along her career path of law. She conquered every obstacle encountered with the strength of a medieval warrior and unwavering faith in the Lord. She was gifted with words, a skill that everyone in her life recognised and admired. Her sisters recall how much trouble she would get into as a teenager because of her love for reading, which often resulted in overcooked food and a very unhappy mother. Her husband reflects on her ‘ability to coin things and words’ in ways that left a lasting impression. She earned herself the reputation of being 'hands-on' when it came to planning events and involvement in her children's activities.
               </p>
             </div>
             <div className="space-y-6">
               <p className="text-base font-light text-slate-300 leading-relaxed font-crimson">
-                [Share more about her relationships with family and friends, memorable moments, traditions she cherished, and how she will be remembered.]
+              As a mother, her influence spread far beyond that of the only child she birthed, and she assumed maternal guidance on nearly every child in the vicinity. Strict and unbending as she could be, she made sure to make room for expression, and she made for her children a home in her arms.
               </p>
               <p className="text-base font-light text-slate-300 leading-relaxed font-crimson">
-                [Conclude with thoughts about her lasting impact and how her memory continues to inspire those who knew her.]
+              As a wife, she was loving, honest, and incredibly supportive. As a daughter, she was dedicated, considerate, and responsible. As a friend, she was helpful, straightforward, and ever-present. In all of her relationships, her impact will endure
               </p>
             </div>
           </div>
