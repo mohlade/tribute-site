@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { db } from './firebaseConfig'; // <-- This is where we import the database connection
+import { collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc } from 'firebase/firestore'; // <-- Firebase functions for database operations
 
 // --- Reusable Component Abstractions ---
 
@@ -152,7 +154,7 @@ const PhotoGallery = () => (
   </section>
 );
 
-const TributeList = ({ allTributes }) => (
+const TributeList = ({ allTributes, deleteTribute }) => (
   <section className="py-16 tributes-display w-full px-4 md:px-8">
     <div className="relative backdrop-blur-custom bg-white/5 rounded-2xl border border-white/10 shadow-xl overflow-hidden w-full">
       <div className="relative p-6 md:p-12 responsive-p-12">
@@ -193,6 +195,16 @@ const TributeList = ({ allTributes }) => (
                     {tribute.relationship}
                   </div>
                 </div>
+                {/* Delete button logic */}
+                <button
+                  onClick={() => deleteTribute(tribute.id)}
+                  className="absolute top-4 right-4 text-slate-500 hover:text-red-400 transition-colors duration-200"
+                  title="Delete this tribute"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
             </div>
           ))}
@@ -308,6 +320,19 @@ function App() {
   ];
 
   useEffect(() => {
+    // Fetches tributes from the database in real-time
+    const q = query(collection(db, 'tributes'), orderBy('dateSubmitted', 'desc'));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const tributesArray = [];
+      querySnapshot.forEach((doc) => {
+        tributesArray.push({ ...doc.data(), id: doc.id });
+      });
+      setAllTributes(tributesArray);
+    });
+    return () => unsubscribe(); // Cleanup the listener when the component unmounts
+  }, []);
+
+  useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slideshowImages.length);
     }, 5000);
@@ -319,11 +344,10 @@ function App() {
       alert('Please fill in your name and tribute message before submitting.');
       return;
     }
-
+    
     setIsSubmitting(true);
-    setTimeout(() => {
-      const newTribute = {
-        id: Date.now(),
+    try {
+      await addDoc(collection(db, 'tributes'), {
         name: formData.name.trim(),
         relationship: formData.relationship.trim() || 'Family & Friend',
         memory: formData.memory.trim(),
@@ -332,26 +356,26 @@ function App() {
           month: 'long',
           day: 'numeric'
         }),
-        timeSubmitted: new Date().toLocaleTimeString('en-US', {
-          hour: '2-digit',
-          minute: '2-digit'
-        })
-      };
-
-      setAllTributes(prev => [newTribute, ...prev]);
-      setFormData({ name: '', relationship: '', memory: '' });
+        timestamp: new Date() // A timestamp for ordering
+      });
+      setFormData({ name: '', relationship: '', memory: '' }); // Clear the form
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      alert("Failed to share your tribute. Please try again.");
+    } finally {
       setIsSubmitting(false);
-
-      setTimeout(() => {
-        const element = document.querySelector('.tributes-display');
-        element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
-    }, 800);
+    }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && e.ctrlKey) {
-      submitTribute();
+  const deleteTribute = async (id) => {
+    if (window.confirm("Are you sure you want to delete this tribute? This action cannot be undone.")) {
+      try {
+        await deleteDoc(doc(db, 'tributes', id));
+        console.log("Tribute deleted successfully!");
+      } catch (e) {
+        console.error("Error deleting document: ", e);
+        alert("Failed to delete the tribute. Please try again.");
+      }
     }
   };
 
@@ -452,7 +476,7 @@ function App() {
           />
           <AboutSection />
           <PhotoGallery />
-          {allTributes.length > 0 && <TributeList allTributes={allTributes} />}
+          {allTributes.length > 0 && <TributeList allTributes={allTributes} deleteTribute={deleteTribute} />}
           <TributeForm
             formData={formData}
             setFormData={setFormData}
@@ -473,9 +497,9 @@ function App() {
                     Forever in Our Hearts
                   </h3>
                   <div className="flex justify-center items-center space-x-6 mb-8">
-                    <div className="w-12 h-px bg-gradient-to-r from-transparent to-teal-300"></div>
+                    <div className="w-6 h-px bg-gradient-to-r from-transparent to-teal-300"></div>
                     <div className="text-3xl text-teal-200/60">🕊️</div>
-                    <div className="w-12 h-px bg-gradient-to-l from-transparent to-teal-300"></div>
+                    <div className="w-6 h-px bg-gradient-to-l from-transparent to-teal-300"></div>
                   </div>
                   <p className="text-slate-300 text-base font-light leading-relaxed mb-8 font-crimson">
                     Until we meet again, may you rest in peace, knowing how deeply you were loved and how greatly you are missed.
