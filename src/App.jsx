@@ -192,7 +192,7 @@ const PhotoGallery = () => (
   </section>
 );
 
-const TributeList = ({ allTributes, deleteTribute }) => (
+const TributeList = ({ allTributes }) => (
   <section className="py-16 tributes-display w-full px-4 md:px-8">
     <div className="relative backdrop-blur-custom bg-white/5 rounded-2xl border border-white/10 shadow-xl overflow-hidden w-full">
       <div className="relative p-6 md:p-12 responsive-p-12">
@@ -214,7 +214,6 @@ const TributeList = ({ allTributes, deleteTribute }) => (
             >
               <div className="relative p-6 flex flex-col h-full">
                 <div className="flex items-start justify-between mb-4">
-                  {/* Name and Relationship are now consistently aligned */}
                   <div className="flex flex-col">
                     <div className="text-lg font-medium text-white font-inter">
                       {tribute.name}
@@ -224,20 +223,9 @@ const TributeList = ({ allTributes, deleteTribute }) => (
                     </div>
                   </div>
                   <div className="flex flex-col items-end">
-                    {/* Date is now separate from the delete button */}
                     <div className="text-xs text-slate-500 font-light font-inter mb-2">
                       {tribute.dateSubmitted}
                     </div>
-                    {/* Delete button logic */}
-                    <button
-                      onClick={() => deleteTribute(tribute.id)}
-                      className="text-slate-500 hover:text-red-400 transition-colors duration-200 p-1 -mt-1"
-                      title="Delete this tribute"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
                   </div>
                 </div>
                 <div className="relative flex-grow">
@@ -245,7 +233,6 @@ const TributeList = ({ allTributes, deleteTribute }) => (
                     {tribute.memory}
                   </p>
                 </div>
-                {/* Removed the extra relationship div at the bottom since it's now at the top */}
               </div>
             </div>
           ))}
