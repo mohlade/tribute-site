@@ -1,18 +1,33 @@
-import { useState, useEffect } from 'react';
-import { db } from './firebaseConfig'; // <-- This is where we import the database connection
-import { collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc } from 'firebase/firestore'; // <-- Firebase functions for database operations
+import { useState, useEffect, useRef } from 'react';
+import { db } from './firebaseConfig';
+import { collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc } from 'firebase/firestore';
+
+// --- Import all assets here ---
+import tributeMusic from './assets/tribute.mp3';
+import pic9 from './assets/picture1.JPG';
+import pic2 from './assets/picture2.jpg';
+import pic5 from './assets/picture3.JPG';
+import pic4 from './assets/picture4.JPG';
+import pic3 from './assets/picture14.JPG';
+import pic6 from './assets/picture6.JPG';
+import pic7 from './assets/picture7.JPG';
+import pic8 from './assets/picture8.JPG';
+import pic1 from './assets/picture15.JPG';
+import pic10 from './assets/picture10.JPG';
+import pic11 from './assets/picture11.JPG';
+import pic12 from './assets/picture12.JPG';
 
 // --- Reusable Component Abstractions ---
 
 const HeroSection = ({ currentSlide, slideshowImages, setCurrentSlide }) => (
-  <section className="min-h-screen flex items-center justify-center py-16 hero-bg w-full">
+  <section className="min-h-[100vh] flex items-center justify-center py-16 hero-bg w-full">
     <div className="w-full px-4 md:px-8">
       <div className="relative backdrop-blur-custom bg-white/5 rounded-2xl border border-white/10 shadow-xl overflow-hidden w-full">
         <div className="relative p-6 md:p-12 responsive-p-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="relative">
-              <div className="relative w-full h-80 rounded-xl overflow-hidden shadow-lg border border-slate-700/50">
-                <div className="relative w-full h-full">
+              <div className="relative w-full rounded-xl overflow-hidden shadow-lg border border-slate-700/50">
+                <div className="relative w-full h-[60vh]">
                   {slideshowImages.map((image, index) => (
                     <div
                       key={index}
@@ -20,13 +35,11 @@ const HeroSection = ({ currentSlide, slideshowImages, setCurrentSlide }) => (
                         index === currentSlide ? 'opacity-100' : 'opacity-0'
                       }`}
                     >
-                      <div className="w-full h-full bg-slate-200/50 flex items-center justify-center relative">
-                        <div className="text-center">
-                          <div className="text-4xl mb-3 text-slate-400">🖼️</div>
-                          <div className="text-slate-500 text-sm font-medium">{image.title}</div>
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-transparent"></div>
-                      </div>
+                      <img 
+                          src={image.src} 
+                          alt={image.title} 
+                          className="w-full h-full object-contain" 
+                      />
                     </div>
                   ))}
                 </div>
@@ -54,10 +67,10 @@ const HeroSection = ({ currentSlide, slideshowImages, setCurrentSlide }) => (
               </h1>
               <div className="w-32 h-px bg-gradient-to-r from-teal-300 via-blue-200 to-teal-300 mx-auto lg:mx-0 mb-6"></div>
               <p className="text-lg text-slate-200 mb-3 font-light font-inter">
-                Beloved Wife, Mother, Sister , Aunt, In-law and Friend
+              Beloved Wife, Mother, Sister , Aunt, In-law and Friend
               </p>
               <p className="text-base text-slate-400 mb-8 font-light tracking-wide">
-                15th Sept 1970 — 25th Aug 2025
+              15th Sept 1970 — 25th Aug 2025
               </p>
               <div className="relative mb-8">
                 <blockquote className="text-lg font-light text-slate-100 leading-relaxed italic font-crimson">
@@ -99,7 +112,7 @@ const AboutSection = () => (
         <div className="w-full">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
             <div className="space-y-6">
-              <p className="text-base font-light text-slate-200 leading-relaxed first-letter:text-4xl first-letter:font-medium first-letter:text-teal-200 first-letter:float-left first-letter:mr-3 first-letter:mt-1 font-crimson">
+            <p className="text-base font-light text-slate-200 leading-relaxed first-letter:text-4xl first-letter:font-medium first-letter:text-teal-200 first-letter:float-left first-letter:mr-3 first-letter:mt-1 font-crimson">
               Maama, as she has always been called by the children closest to her, has a reputation for being a solid woman - a woman of substance. Anyone in her orbit will describe her as spirited, generous, and cultured in her relations with people both senior and junior to her. She was at her best when spending time with her family. She demonstrated her love in acts of service, and she absolutely loves children. She always had a certain connection with each child. She was passionate about God, her family, giving, and excelled in whatever role she found herself in. As a matter of fact, diligence was a scale on which she believed a person's character must be weighed on in addition to other things. People who knew her (specifically in her youth) recall her as a 'spitfire', with a tongue just as sharp as the mind working behind it.
               </p>
               <p className="text-base font-light text-slate-300 leading-relaxed font-crimson">
@@ -136,17 +149,42 @@ const PhotoGallery = () => (
         </div>
         <div className="w-full">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-2xl mb-2 text-slate-400">📷</div>
-                    <div className="text-slate-500 text-xs font-medium">Photo {i + 1}</div>
-                  </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
-              </div>
-            ))}
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic1} alt="Tribute Photo 1" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic2} alt="Tribute Photo 2" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic3} alt="Tribute Photo 3" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic4} alt="Tribute Photo 4" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic5} alt="Tribute Photo 5" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic6} alt="Tribute Photo 6" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic7} alt="Tribute Photo 7" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic8} alt="Tribute Photo 8" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic9} alt="Tribute Photo 9" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic10} alt="Tribute Photo 10" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic11} alt="Tribute Photo 11" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic12} alt="Tribute Photo 12" className="w-full h-full object-cover" />
+            </div>
           </div>
         </div>
       </div>
@@ -176,13 +214,30 @@ const TributeList = ({ allTributes, deleteTribute }) => (
             >
               <div className="relative p-6 flex flex-col h-full">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center">
+                  {/* Name and Relationship are now consistently aligned */}
+                  <div className="flex flex-col">
                     <div className="text-lg font-medium text-white font-inter">
                       {tribute.name}
                     </div>
+                    <div className="text-xs text-slate-500 font-light font-inter mt-1">
+                      {tribute.relationship}
+                    </div>
                   </div>
-                  <div className="text-xs text-slate-500 font-light font-inter">
-                    {tribute.dateSubmitted}
+                  <div className="flex flex-col items-end">
+                    {/* Date is now separate from the delete button */}
+                    <div className="text-xs text-slate-500 font-light font-inter mb-2">
+                      {tribute.dateSubmitted}
+                    </div>
+                    {/* Delete button logic */}
+                    <button
+                      onClick={() => deleteTribute(tribute.id)}
+                      className="text-slate-500 hover:text-red-400 transition-colors duration-200 p-1 -mt-1"
+                      title="Delete this tribute"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
                 <div className="relative flex-grow">
@@ -190,21 +245,7 @@ const TributeList = ({ allTributes, deleteTribute }) => (
                     {tribute.memory}
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-slate-600/30">
-                  <div className="text-xs text-slate-500 font-light font-inter">
-                    {tribute.relationship}
-                  </div>
-                </div>
-                {/* Delete button logic */}
-                <button
-                  onClick={() => deleteTribute(tribute.id)}
-                  className="absolute top-4 right-4 text-slate-500 hover:text-red-400 transition-colors duration-200"
-                  title="Delete this tribute"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+                {/* Removed the extra relationship div at the bottom since it's now at the top */}
               </div>
             </div>
           ))}
@@ -265,7 +306,7 @@ const TributeForm = ({ formData, setFormData, submitTribute, isSubmitting, allTr
                   onChange={(e) => setFormData({ ...formData, memory: e.target.value })}
                   rows={6}
                   className="w-full p-4 bg-slate-900/50 border border-slate-600/40 rounded-lg text-slate-200 placeholder-slate-500 text-base font-light focus:bg-slate-800/60 focus:border-teal-400/50 focus:outline-none transition-all duration-300 resize-none"
-                  placeholder="Share a favorite memory or what she meant to you..."
+                  placeholder="Share your tribute message here..."
                   disabled={isSubmitting}
                 />
               </div>
@@ -300,6 +341,47 @@ const TributeForm = ({ formData, setFormData, submitTribute, isSubmitting, allTr
   </section>
 );
 
+const BurialCeremony = () => (
+  <section className="py-16 w-full px-4 md:px-8">
+    <div className="relative backdrop-blur-custom bg-white/5 rounded-2xl border border-white/10 shadow-xl overflow-hidden w-full">
+      <div className="relative p-6 md:p-12 responsive-p-12">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-light text-white mb-6 font-playfair">
+            Burial Ceremony Dates
+          </h2>
+          <div className="w-24 h-px bg-gradient-to-r from-transparent via-teal-300 to-transparent mx-auto"></div>
+        </div>
+        <div className="w-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            {/* Service of Songs */}
+            <div className="p-6 rounded-lg bg-slate-800/30 border border-slate-600/30 transition-all hover:bg-slate-700/30">
+              <p className="text-2xl font-light text-teal-300 mb-2 font-inter">Tuesday 9th September 2025</p>
+              <h3 className="text-xl font-medium text-white mb-2 font-crimson">Service of Songs</h3>
+              <p className="text-base text-slate-300 mb-1 font-inter">Lagos</p>
+              <p className="text-base text-slate-300 font-inter">5pm</p>
+            </div>
+            {/* Funeral Service */}
+            <div className="p-6 rounded-lg bg-slate-800/30 border border-slate-600/30 transition-all hover:bg-slate-700/30">
+              <p className="text-2xl font-light text-teal-300 mb-2 font-inter">Friday 19th September 2025</p>
+              <h3 className="text-xl font-medium text-white mb-2 font-crimson">Funeral Service</h3>
+              <p className="text-base text-slate-300 mb-1 font-inter">Lagos</p>
+              <p className="text-base text-slate-300 font-inter">9am</p>
+            </div>
+            {/* Interment */}
+            <div className="p-6 rounded-lg bg-slate-800/30 border border-slate-600/30 transition-all hover:bg-slate-700/30">
+              <p className="text-2xl font-light text-teal-300 mb-2 font-inter">Friday 19th September 2025</p>
+              <h3 className="text-xl font-medium text-white mb-2 font-crimson">Interment</h3>
+              <p className="text-base text-slate-300 mb-1 font-inter">Lagos</p>
+              <p className="text-base text-slate-300 font-inter">11:30am</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+
 // --- Main App Component ---
 
 function App() {
@@ -311,17 +393,19 @@ function App() {
   });
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const audioRef = useRef(null);
 
+  // Updated slideshow with imported image paths
   const slideshowImages = [
-    { title: "In Loving Memory", description: "Forever in our hearts" },
-    { title: "Cherished Moments", description: "Beautiful memories we hold dear" },
-    { title: "Life's Journey", description: "A life that touched so many" },
-    { title: "Peaceful Rest", description: "May you find eternal peace" }
+    { src: pic1, title: "In Loving Memory", description: "Forever in our hearts" },
+    { src: pic2, title: "Cherished Moments", description: "Beautiful memories we hold dear" },
+    { src: pic3, title: "Life's Journey", description: "A life that touched so many" },
+    { src: pic4, title: "Joyful Spirit", description: "A smile that lit up the room" },
   ];
 
+  // Listener for Firestore data
   useEffect(() => {
-    // Fetches tributes from the database in real-time
-    const q = query(collection(db, 'tributes'), orderBy('dateSubmitted', 'desc'));
+    const q = query(collection(db, 'tributes'), orderBy('timestamp', 'desc'));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const tributesArray = [];
       querySnapshot.forEach((doc) => {
@@ -329,15 +413,32 @@ function App() {
       });
       setAllTributes(tributesArray);
     });
-    return () => unsubscribe(); // Cleanup the listener when the component unmounts
+    return () => unsubscribe();
   }, []);
 
+  // Slideshow timer
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slideshowImages.length);
     }, 5000);
     return () => clearInterval(timer);
   }, [slideshowImages.length]);
+
+  // Audio player and control
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      if (audioRef.current && audioRef.current.paused) {
+        audioRef.current.play().catch(error => {
+          console.error("Autoplay failed:", error);
+        });
+      }
+    };
+
+    document.addEventListener('click', handleUserInteraction, { once: true });
+    return () => {
+      document.removeEventListener('click', handleUserInteraction);
+    };
+  }, []);
 
   const submitTribute = async () => {
     if (!formData.name.trim() || !formData.memory.trim()) {
@@ -356,9 +457,9 @@ function App() {
           month: 'long',
           day: 'numeric'
         }),
-        timestamp: new Date() // A timestamp for ordering
+        timestamp: new Date()
       });
-      setFormData({ name: '', relationship: '', memory: '' }); // Clear the form
+      setFormData({ name: '', relationship: '', memory: '' });
     } catch (e) {
       console.error("Error adding document: ", e);
       alert("Failed to share your tribute. Please try again.");
@@ -462,6 +563,12 @@ function App() {
         html, body, #root { width: 100%; height: 100%; margin: 0; padding: 0; }
       `}</style>
 
+      {/* Audio player */}
+      <audio ref={audioRef} autoPlay loop>
+        <source src={tributeMusic} type="audio/mp3" />
+        Your browser does not support the audio element.
+      </audio>
+
       <div className="min-h-screen relative overflow-hidden w-full bg-slate-900">
         <div className="fixed inset-0 pointer-events-none flex items-center justify-center">
           <div className="absolute w-80 h-80 rounded-full bg-blue-500/10 animate-subtle-glow"></div>
@@ -484,6 +591,7 @@ function App() {
             isSubmitting={isSubmitting}
             allTributes={allTributes}
           />
+          <BurialCeremony />
           <section className="py-16 w-full px-4 md:px-8">
             <div className="relative backdrop-blur-custom bg-white/5 rounded-2xl border border-white/10 shadow-xl overflow-hidden w-full">
               <div className="relative p-6 md:p-12 responsive-p-12 text-center">
