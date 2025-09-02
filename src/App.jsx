@@ -16,6 +16,10 @@ import pic1 from './assets/picture15.JPG';
 import pic10 from './assets/picture10.JPG';
 import pic11 from './assets/picture11.JPG';
 import pic12 from './assets/picture12.JPG';
+import pic20 from './assets/picture20.JPG';
+import pic30 from './assets/picture30.JPG';
+import pic40 from './assets/picture40.JPG';
+import pic50 from './assets/picture50.JPG';
 
 // --- Reusable Component Abstractions ---
 
@@ -67,7 +71,7 @@ const HeroSection = ({ currentSlide, slideshowImages, setCurrentSlide }) => (
               </h1>
               <div className="w-32 h-px bg-gradient-to-r from-teal-300 via-blue-200 to-teal-300 mx-auto lg:mx-0 mb-6"></div>
               <p className="text-lg text-slate-200 mb-3 font-light font-inter">
-              Beloved Wife, Mother, Sister , Aunt, In-law and Friend
+              Beloved Wife, Mother, Sister , Aunt and Friend
               </p>
               <p className="text-base text-slate-400 mb-8 font-light tracking-wide">
               15th Sept 1970 — 25th Aug 2025
@@ -185,13 +189,25 @@ const PhotoGallery = () => (
             <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
               <img src={pic12} alt="Tribute Photo 12" className="w-full h-full object-cover" />
             </div>
+            {/* New photos added here */}
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic20} alt="Tribute Photo 20" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic30} alt="Tribute Photo 30" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic40} alt="Tribute Photo 40" className="w-full h-full object-cover" />
+            </div>
+            <div className="relative group aspect-square rounded-lg overflow-hidden bg-slate-800/20 border border-slate-600/30">
+              <img src={pic50} alt="Tribute Photo 50" className="w-full h-full object-cover" />
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 );
-
 const TributeList = ({ allTributes }) => (
   <section className="py-16 tributes-display w-full px-4 md:px-8">
     <div className="relative backdrop-blur-custom bg-white/5 rounded-2xl border border-white/10 shadow-xl overflow-hidden w-full">
